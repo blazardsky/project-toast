@@ -4,34 +4,29 @@ import Button from '../Button';
 import ToastShelf from '../ToastShelf/ToastShelf';
 
 import styles from './ToastPlayground.module.css';
+import { ToastContext } from '../ToastProvider';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
 
   const [message, setMessage] = React.useState('');
-  const [currentVariant, setCurrentVariant] = React.useState(localStorage.getItem('variant') || VARIANT_OPTIONS[0]);
-  const [toastQueue, setToastQueue] = React.useState([]);
+  const [currentVariant, setCurrentVariant] = React.useState( ()=> {
+    return window.localStorage.getItem('variant') || VARIANT_OPTIONS[0]
+  });
+
+  const {setToastQueue} = React.useContext(ToastContext)
 
   const handlePopToast = (e) => {
     e.preventDefault();
-    setToastQueue([
-      ...toastQueue.slice(-6),
-      {
-        id: Math.random(),
-        message: message,
-        variant: currentVariant
-      }
-    ]);
+    setToastQueue(message, currentVariant);
     setMessage('');
     setCurrentVariant(VARIANT_OPTIONS[0])
   }
 
-  React.useEffect(
-    ()=>{
-      localStorage.setItem('variant',currentVariant)
-    },[currentVariant]
-  )
+  React.useEffect(()=>{
+    window.localStorage.setItem('variant',currentVariant)
+  }, [currentVariant]);
 
   return (
     <div className={styles.wrapper}>
@@ -40,7 +35,7 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <ToastShelf toasts={toastQueue}/>
+      <ToastShelf />
 
       <form className={styles.controlsWrapper} action="" onSubmit={handlePopToast}>
         <div className={styles.row}>

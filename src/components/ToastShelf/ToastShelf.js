@@ -2,24 +2,37 @@ import React from "react";
 
 import Toast from "../Toast";
 import styles from "./ToastShelf.module.css";
+import { ToastContext } from "../ToastProvider";
+import VisuallyHidden from "../VisuallyHidden";
+import useKeyDown from "../../hooks/useKeyDown";
 
-function ToastShelf({toasts}) {
-  if (toasts == false){
-    return null;
-  }
+function ToastShelf() {
+
+  const {toastQueue, removeToast, removeOldToast, queueExists} = React.useContext(ToastContext);  
+
+  useKeyDown("Escape", removeOldToast);
 
   return (
-    <ol className={styles.wrapper}>
-      {toasts.map(({id, variant, message}) => (
-        <li key={id} className={styles.toastWrapper}>
-          <Toast variant={variant}>
-            {message}
-          </Toast>
-        </li>
-      ))}
-    </ol>
+    <>
+      <VisuallyHidden id="notification-title">Notification</VisuallyHidden>
+      <ol
+        role="region"
+        aria-live="polite"
+        aria-labelledby="notification-title"
+        className={styles.wrapper}
+      >
+        {queueExists &&
+          toastQueue.map(({ id, variant, message }) => (
+            <li key={id} id={id} className={styles.toastWrapper}>
+              <Toast variant={variant} dismiss={() => removeToast(id)}>
+                {message}
+              </Toast>
+            </li>
+          ))}
+      </ol>
+    </>
   );
   
 }
 
-export default React.memo(ToastShelf);
+export default ToastShelf;

@@ -8,7 +8,6 @@ import {
 } from 'react-feather';
 
 import VisuallyHidden from '../VisuallyHidden';
-import useToggleToast from '../../hooks/useToggleToast';
 
 import styles from './Toast.module.css';
 
@@ -19,21 +18,17 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast({variant, children}) {
+function Toast({variant, dismiss, children}) {
   
   const Icon = ICONS_BY_VARIANT[variant];
-  const [showToast, setShowToast] = React.useState(true);
 
-  React.useEffect(()=>{
-    const disappear = setTimeout(
-      ()=> setShowToast(false), 6000
-    )
-    return () => clearTimeout(disappear) 
-  },[setShowToast])
-
-  if (!showToast) {
-    return null;
-  }
+  React.useEffect(() => {
+    const disappear = setTimeout(() => {
+      console.log(`Time's up!`);
+      dismiss();
+    }, 6000);
+    return () => clearTimeout(disappear);
+  }, []);
 
   return (
     <div className={`${styles.toast} ${styles[variant]}`}>
@@ -41,11 +36,13 @@ function Toast({variant, children}) {
         <Icon size={24} />
       </div>
       <p className={styles.content}>
+        <VisuallyHidden>
+          {variant} -{' '}
+        </VisuallyHidden>
         {children}
       </p>
-      <button className={styles.closeButton} onClick={()=>setShowToast(false)}>
+      <button tab-index="1" className={styles.closeButton} onClick={dismiss} aria-live="off" aria-label="Dismiss message">
         <X size={24} />
-        <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
     </div>
   );
