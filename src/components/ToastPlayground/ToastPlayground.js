@@ -37,7 +37,7 @@ function ToastPlayground() {
 
       <ToastShelf />
 
-      <form className={styles.controlsWrapper} action="" onSubmit={handlePopToast}>
+      <form className={styles.controlsWrapper} onSubmit={handlePopToast}>
         <div className={styles.row}>
           <label
             htmlFor="message"
@@ -91,7 +91,7 @@ function ToastPlayground() {
           <div
             className={`${styles.inputWrapper} ${styles.radioWrapper}`}
           >
-            <Button >Pop Toast!</Button>
+            <Button>Pop Toast!</Button>
           </div>
         </div>
       </form>

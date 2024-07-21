@@ -4,13 +4,16 @@ import Toast from "../Toast";
 import styles from "./ToastShelf.module.css";
 import { ToastContext } from "../ToastProvider";
 import VisuallyHidden from "../VisuallyHidden";
+
 import useKeyDown from "../../hooks/useKeyDown";
+//import useLongKeyDown from "../../hooks/useLongKeyDown";
 
 function ToastShelf() {
 
   const {toastQueue, removeToast, removeOldToast, queueExists} = React.useContext(ToastContext);  
 
   useKeyDown("Escape", removeOldToast);
+  //useLongKeyDown("Escape", clearAllToasts); // USELESS: if I keep esc pressed it deletes all of them quite fast, one by one
 
   return (
     <>

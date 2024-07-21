@@ -27,6 +27,11 @@ const ToastProvider = ({ children }) => {
     )
   }
 
+  // function clearAllToasts() {
+  //   console.log(`Toast queue reset.`)
+  //   _setToastQueue([])
+  // }
+
   function removeOldToast(){
     /** remove last item */
     console.log(`removed first toast`)
